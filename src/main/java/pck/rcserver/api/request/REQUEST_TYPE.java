@@ -2,6 +2,13 @@ package pck.rcserver.api.request;
 
 public enum REQUEST_TYPE {
     TEST_CONNECTION,
-    SIGN_UP,
-    SIGN_IN
+    GET_LIST_RUNNING_PROCESS,
+    START_PROCESS,
+    STOP_PROCESS,
+    GET_LIST_RUNNING_APP,
+    START_APP,
+    STOP_APP,
+    TAKE_SCREENSHOT,
+    PRESS_KEY,
+    SHUTDOWN
 }
