@@ -13,6 +13,10 @@ public class Server {
     public static LinkedHashMap<Integer, Client> clients = new LinkedHashMap<>();
     public static Thread thread;
 
+    public static void main(String[] args) {
+        create();
+        start();
+    }
     private static ServerSocket serverSocket = null;
 
     public static ServerSocket getServerSocket() {

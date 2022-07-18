@@ -2,15 +2,19 @@ package pck.rcserver.be.server;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import lc.kra.system.keyboard.GlobalKeyboardHook;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.ArrayList;
 
 public class Client {
     private final Socket socket;
     private final StringProperty username;
+    private ArrayList<Integer> keypressList = new ArrayList<>();
+    private GlobalKeyboardHook keyboardHook = null;
     private DataInputStream dataIn;
     private DataOutputStream dataOut;
 
@@ -58,5 +62,21 @@ public class Client {
 
     public void setDataOut(DataOutputStream dataOut) {
         this.dataOut = dataOut;
+    }
+
+    public ArrayList<Integer> getKeypressList() {
+        return keypressList;
+    }
+
+    public void setKeypressList(ArrayList<Integer> keypressList) {
+        this.keypressList = keypressList;
+    }
+
+    public GlobalKeyboardHook getKeyboardHook() {
+        return keyboardHook;
+    }
+
+    public void setKeyboardHook(GlobalKeyboardHook keyboardHook) {
+        this.keyboardHook = keyboardHook;
     }
 }
