@@ -42,8 +42,8 @@ public class API {
                 }
 
                 case STOP_APP -> {
-                    String appName = dataIn.readUTF();
-                    return new StopApplicationRequest(appName);
+                    int pid = dataIn.readInt();
+                    return new StopApplicationRequest(pid);
                 }
 
                 default -> {
@@ -83,11 +83,9 @@ public class API {
                     dataOut.writeInt(res.winProcesses.size());
 
                     for (WinProcess winProcess : res.winProcesses) {
-                        dataOut.writeUTF(winProcess.getImageName());
+                        dataOut.writeUTF(winProcess.getName());
                         dataOut.writeInt(winProcess.getPid());
-                        dataOut.writeUTF(winProcess.getSessionName());
-                        dataOut.writeInt(winProcess.getSessionId());
-                        dataOut.writeUTF(winProcess.getMemUsage());
+                        dataOut.writeDouble(winProcess.getMemUsage());
                     }
 
                     return true;
@@ -104,10 +102,9 @@ public class API {
                     dataOut.writeInt(res.getWinApps().size());
 
                     for (WinApp winApp : res.getWinApps()) {
-                        dataOut.writeUTF(winApp.getImageName());
+                        dataOut.writeUTF(winApp.getName());
                         dataOut.writeInt(winApp.getPid());
-                        dataOut.writeUTF(winApp.getMemUsage());
-                        dataOut.writeUTF(winApp.getPackageName());
+                        dataOut.writeDouble(winApp.getMemUsage());
                     }
 
                     return true;

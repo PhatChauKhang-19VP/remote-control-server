@@ -17,9 +17,9 @@ public class WinAPI {
     public static boolean run = false;
 
     public static void main(String[] args) {
-        // System.out.println(getListRunningProcess());
-        // System.out.println(getListRunningApp());
-        startProcess("notepad.exe");
+        // getListRunningProcess();
+        // getListRunningApp();
+        System.out.println(startProcess("notepad345.exe"));
         // stopProcess(???)
         // startApp("notepad.exe");
         // System.out.println(stopApp("notepad.exe"));
@@ -44,12 +44,12 @@ public class WinAPI {
     }
 
     public static boolean startProcess(String processName) {
-        ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/c", processName);
-
         try {
-            Process p = pb.start();
+            String command = ("powershell.exe " + processName);
+            Process p = Runtime.getRuntime().exec(command);
 
-            if (p.getErrorStream().available() > 0) {
+            // System.out.println(new String(p.getInputStream().readAllBytes()));
+            if (new String(p.getErrorStream().readAllBytes()).length() > 0) {
                 return false;
             }
             return true;
@@ -60,72 +60,93 @@ public class WinAPI {
     }
 
     public static ArrayList<WinProcess> getListRunningProcess() {
-        ArrayList<WinProcess> runningProcesses = new ArrayList<>();
+        ArrayList<WinProcess> winProcesses = new ArrayList<>();
         try {
-            ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/c", "tasklist.exe");
+            String command = ("powershell.exe gps | select Name, Id, VM");
 
-            Process p = pb.start();
+            Process p = Runtime.getRuntime().exec(command);
 
             Scanner sc = new Scanner(p.getInputStream());
-            String line;
 
-            line = sc.nextLine(); // trash
-            line = sc.nextLine();
-            line = sc.nextLine();
+            sc.nextLine(); // trash
+            System.out.println(sc.nextLine()); // header
+            sc.nextLine(); // trash
 
             while (sc.hasNextLine()) {
+                String line = sc.nextLine();
+                String[] vals = line.trim().split("\s+");
 
-                line = sc.nextLine();
+                if (vals.length != 3) continue;
 
-                String[] spitted = line.split("\s+");
+                WinProcess winProcess = new WinProcess(
+                        vals[0],
+                        Integer.parseInt(vals[1].replace(",", "")),
+                        Double.parseDouble(vals[2].replace(",", "")) / 1024D / 1024D
+                );
 
-                StringBuilder imageName = new StringBuilder(spitted[0]);
-                int i = 1;
-                for (; i <= spitted.length - 6; i++) {
-                    imageName.append(" ").append(spitted[i]);
-                }
-                WinProcess winProcess = new WinProcess(imageName.toString(), Integer.parseInt(spitted[i]), spitted[i + 1], Integer.parseInt(spitted[i + 2]), String.format("%s", spitted[i + 3]));
-
-                runningProcesses.add(winProcess);
+                winProcesses.add(winProcess);
+                System.out.println(winProcess);
             }
 
             sc.close();
-            p.destroy();
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
 
-        return runningProcesses;
+        return winProcesses;
+    }
+
+    public static boolean stopProcess(int pid) {
+        ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/c", String.format("taskkill /f /pid %d", pid));
+
+        try {
+            Process p = pb.start();
+
+            if (new String(p.getErrorStream().readAllBytes()).length() > 0) {
+
+                return false;
+            }
+
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+
+            return false;
+        }
     }
 
     public static ArrayList<WinApp> getListRunningApp() {
         ArrayList<WinApp> winApps = new ArrayList<>();
         try {
-            ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/c", "tasklist.exe /apps");
+            String command = "powershell.exe gps | ? { $_.MainWindowTitle } | select Name, Id, VM";
 
-            Process p = pb.start();
+            // Executing the command
+            Process p = Runtime.getRuntime().exec(command);
 
             Scanner sc = new Scanner(p.getInputStream());
-            String line;
 
-            line = sc.nextLine(); // trash
-            line = sc.nextLine();
-            line = sc.nextLine();
+            sc.nextLine(); // trash
+            sc.nextLine();
+            sc.nextLine();
 
             while (sc.hasNextLine()) {
+                String line = sc.nextLine();
+                String[] vals = line.trim().split("\s+");
 
-                line = sc.nextLine();
+                if (vals.length != 3) continue;
 
-                String[] spitted = line.split("\s+");
-
-                WinApp winApp = new WinApp(String.format("%s %s", spitted[0], spitted[1]), Integer.parseInt(spitted[2]), spitted[3], spitted[5]);
+                WinApp winApp = new WinApp(
+                        vals[0],
+                        Integer.parseInt(vals[1]),
+                        Double.parseDouble(vals[2].replace(",", "")) / 1024D / 1024D
+                );
 
                 winApps.add(winApp);
+                System.out.println(winApp);
             }
 
             sc.close();
-            p.destroy();
         } catch (Exception e) {
             e.printStackTrace();
             return winApps;
@@ -134,32 +155,13 @@ public class WinAPI {
         return winApps;
     }
 
-    public static boolean stopProcess(int pid) {
-        ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/c", String.format("taskkill /pid %d", pid));
-
-        try {
-            Process p = pb.start();
-
-            if (p.getErrorStream().available() > 0) {
-
-                return false;
-            }
-
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-
-            return false;
-        }
-    }
-
     public static boolean startApp(String appName) {
         ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/c", String.format("start %s", appName));
 
         try {
             Process p = pb.start();
 
-            if (p.getErrorStream().available() > 0) {
+            if (new String(p.getErrorStream().readAllBytes()).length() > 0) {
                 return false;
             }
             return true;
@@ -170,17 +172,15 @@ public class WinAPI {
         }
     }
 
-    public static boolean stopApp(String appName) {
-        ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/c", String.format("taskkill /im %s", appName));
+    public static boolean stopApp(int pid) {
+        ProcessBuilder pb = new ProcessBuilder("powershell.exe", String.format("taskkill /f /pid %d", pid));
 
         try {
             Process p = pb.start();
 
-            if (p.getErrorStream().available() > 0) {
-                p.destroy();
+            if (new String(p.getErrorStream().readAllBytes()).length() > 0) {
                 return false;
             }
-            p.destroy();
             return true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -235,22 +235,15 @@ public class WinAPI {
 
     public static boolean shutdown() {
         // ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/c", "shutdown -s -t 2000");
-        ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/c", "shutdown -s -t 2000");
+        ProcessBuilder pb = new ProcessBuilder("powershell.exe", "shutdown -s -t 10000");
 
         try {
             Process p = pb.start();
 
-            Scanner sc = new Scanner(p.getErrorStream());
-
-            boolean ret = true;
-
-            while (sc.hasNextLine()) {
-                String line = sc.nextLine();
-                System.out.println(line);
-
-                ret = false;
+            if (new String(p.getErrorStream().readAllBytes()).length() > 0){
+                return false;
             }
-            return ret;
+            return true;
         } catch (IOException e) {
             e.printStackTrace();
             return false;

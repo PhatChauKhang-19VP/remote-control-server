@@ -1,5 +1,7 @@
 package pck.rcserver.be.server;
 
+import pck.rcserver.ServerGUI;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -18,6 +20,8 @@ public class Server {
         start();
     }
     private static ServerSocket serverSocket = null;
+
+
 
     public static ServerSocket getServerSocket() {
         return serverSocket;
@@ -56,6 +60,8 @@ public class Server {
                         Socket socket = serverSocket.accept();
                         Client client = new Client(socket);
                         clients.put(socket.getPort(), client);
+
+                        ServerGUI.addNewClient(client);
 
                         // Handle request from client
                         Worker handler = new Worker(client);

@@ -1,5 +1,7 @@
 package pck.rcserver.be.server;
 
+import javafx.application.Platform;
+import pck.rcserver.ServerGUI;
 import pck.rcserver.api.API;
 import pck.rcserver.api.request.*;
 import pck.rcserver.api.response.*;
@@ -39,6 +41,14 @@ public class Worker extends Thread {
 
             System.out.println("worker is waiting for another request");
         }
+
+        Server.clients.remove(client.getSocket().getPort());
+        Platform.runLater(() -> {
+            ServerGUI.addNewReqToList(client, client.toString() + " disconnected");
+        });
+        Platform.runLater(() -> {
+            ServerGUI.removeClient(client);
+        });
         System.out.println("worker terminated");
     }
 
@@ -46,6 +56,10 @@ public class Worker extends Thread {
         if (request == null) {
             return null;
         }
+
+        Platform.runLater(() -> {
+            ServerGUI.addNewReqToList(client, request.toString());
+        });
 
         REQUEST_TYPE requestType = request.getType();
 
@@ -150,10 +164,10 @@ public class Worker extends Thread {
             case STOP_APP -> {
                 StopApplicationRequest stopApplicationRequest = (StopApplicationRequest) request;
 
-                if (WinAPI.stopApp(stopApplicationRequest.getAppName())) {
+                if (WinAPI.stopApp(stopApplicationRequest.getPid())) {
                     return new Response(
                             RESPONSE_STATUS.SUCCESS,
-                            "App with name = " + stopApplicationRequest.getAppName() + " has been stopped",
+                            "App with pid = " + stopApplicationRequest.getPid() + " has been stopped",
                             REQUEST_TYPE.STOP_APP
                     );
                 }
