@@ -92,6 +92,10 @@ public class ServerGUI extends Application {
         Server.stop();
     }
 
+    public static void stopServer() {
+        Server.stop();
+    }
+
     public static void gotoIPScreen() {
         try {
             replaceSceneContent("IPScreen.fxml", 600, 600);
