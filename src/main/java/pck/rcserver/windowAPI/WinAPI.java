@@ -19,7 +19,7 @@ public class WinAPI {
     public static void main(String[] args) {
         // getListRunningProcess();
         // getListRunningApp();
-        System.out.println(startProcess("notepad345.exe"));
+        System.out.println(startProcess("notepad345.exe "));
         // stopProcess(???)
         // startApp("notepad.exe");
         // System.out.println(stopApp("notepad.exe"));
@@ -98,7 +98,7 @@ public class WinAPI {
     }
 
     public static boolean stopProcess(int pid) {
-        ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/c", String.format("taskkill /f /pid %d", pid));
+        ProcessBuilder pb = new ProcessBuilder("powershell.exe ", String.format("taskkill /f /pid %d", pid));
 
         try {
             Process p = pb.start();
@@ -156,7 +156,7 @@ public class WinAPI {
     }
 
     public static boolean startApp(String appName) {
-        ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/c", String.format("start %s", appName));
+        ProcessBuilder pb = new ProcessBuilder("powershell.exe ", String.format("start %s", appName));
 
         try {
             Process p = pb.start();
@@ -234,8 +234,7 @@ public class WinAPI {
     }
 
     public static boolean shutdown() {
-        // ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/c", "shutdown -s -t 2000");
-        ProcessBuilder pb = new ProcessBuilder("powershell.exe", "shutdown -s -t 10000");
+        ProcessBuilder pb = new ProcessBuilder("powershell.exe ", "shutdown -s -t 10000");
 
         try {
             Process p = pb.start();

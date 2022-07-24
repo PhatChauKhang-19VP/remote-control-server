@@ -58,6 +58,10 @@ public class ServerGUI extends Application {
         ServerGUI.fxmlLoader = loader;
 
         Scene scene = new Scene(page, width, height);
+
+        stage.setTitle("Remote control server");
+        stage.getIcons().clear();
+        stage.getIcons().add(new Image("static/images/PCK-logo.png"));
         stage.setScene(scene);
 
         stage.sizeToScene();

