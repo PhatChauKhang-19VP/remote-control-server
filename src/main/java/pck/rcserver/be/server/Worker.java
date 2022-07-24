@@ -37,6 +37,9 @@ public class Worker extends Thread {
             //Send response to client
             API.sendResponse(client, res);
 
+            Platform.runLater(() -> {
+                ServerGUI.addNewReqToList(client, "SERVER SEND RESPONSE: " + res);
+            });
             System.out.println("Worker send response: " + res);
 
             System.out.println("worker is waiting for another request");
@@ -49,6 +52,8 @@ public class Worker extends Thread {
         Platform.runLater(() -> {
             ServerGUI.removeClient(client);
         });
+
+
         System.out.println("worker terminated");
     }
 

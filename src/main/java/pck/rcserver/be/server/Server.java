@@ -11,7 +11,7 @@ import java.util.concurrent.Executors;
 
 public class Server {
     public static final int NUM_OF_THREAD = 32;
-    public static int SERVER_PORT= 7;
+    public static int SERVER_PORT= 7777;
     public static LinkedHashMap<Integer, Client> clients = new LinkedHashMap<>();
     public static Thread thread;
 

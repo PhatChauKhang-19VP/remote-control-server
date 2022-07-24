@@ -17,9 +17,10 @@ public class WinAPI {
     public static boolean run = false;
 
     public static void main(String[] args) {
+        System.out.println(startProcess("notepad12312"));
         // getListRunningProcess();
         // getListRunningApp();
-        System.out.println(startProcess("notepad345.exe "));
+        // System.out.println(startProcess("notepad345.exe "));
         // stopProcess(???)
         // startApp("notepad.exe");
         // System.out.println(stopApp("notepad.exe"));
@@ -48,12 +49,14 @@ public class WinAPI {
             String command = ("powershell.exe " + processName);
             Process p = Runtime.getRuntime().exec(command);
 
-            // System.out.println(new String(p.getInputStream().readAllBytes()));
-            if (new String(p.getErrorStream().readAllBytes()).length() > 0) {
-                return false;
+            Thread.sleep(500);
+
+            try {
+                return p.exitValue() == 0;
+            } catch (Exception e) {
+                return true;
             }
-            return true;
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
@@ -103,13 +106,14 @@ public class WinAPI {
         try {
             Process p = pb.start();
 
-            if (new String(p.getErrorStream().readAllBytes()).length() > 0) {
+            Thread.sleep(500);
 
-                return false;
+            try {
+                return p.exitValue() == 0;
+            } catch (Exception e) {
+                return true;
             }
-
-            return true;
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
 
             return false;
@@ -161,11 +165,15 @@ public class WinAPI {
         try {
             Process p = pb.start();
 
-            if (new String(p.getErrorStream().readAllBytes()).length() > 0) {
-                return false;
+            Thread.sleep(500);
+
+            try {
+                return p.exitValue() == 0;
+            } catch (Exception e) {
+                return true;
             }
-            return true;
-        } catch (IOException e) {
+
+        } catch (Exception e) {
             e.printStackTrace();
 
             return false;
@@ -178,11 +186,14 @@ public class WinAPI {
         try {
             Process p = pb.start();
 
-            if (new String(p.getErrorStream().readAllBytes()).length() > 0) {
+            Thread.sleep(500);
+
+            try {
+                return p.exitValue() == 0;
+            } catch (Exception e) {
                 return false;
             }
-            return true;
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
 
             return false;
@@ -234,16 +245,19 @@ public class WinAPI {
     }
 
     public static boolean shutdown() {
-        ProcessBuilder pb = new ProcessBuilder("powershell.exe ", "shutdown -s -t 10000");
+        ProcessBuilder pb = new ProcessBuilder("powershell.exe ", "shutdown -s -t 5000");
 
         try {
             Process p = pb.start();
 
-            if (new String(p.getErrorStream().readAllBytes()).length() > 0){
-                return false;
+            Thread.sleep(1000);
+
+            try {
+                return p.exitValue() == 0;
+            } catch (Exception e) {
+                return true;
             }
-            return true;
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
