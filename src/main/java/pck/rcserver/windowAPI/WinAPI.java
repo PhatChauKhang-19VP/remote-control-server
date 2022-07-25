@@ -245,7 +245,7 @@ public class WinAPI {
     }
 
     public static boolean shutdown() {
-        ProcessBuilder pb = new ProcessBuilder("powershell.exe ", "shutdown -s -t 30000");
+        ProcessBuilder pb = new ProcessBuilder("powershell.exe ", "shutdown -s -t 10");
 
         try {
             Process p = pb.start();
