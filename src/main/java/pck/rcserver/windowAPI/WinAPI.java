@@ -22,7 +22,8 @@ public class WinAPI {
         // getListRunningApp();
         // System.out.println(startProcess("notepad345.exe "));
         // stopProcess(???)
-        // System.out.println(startApp("chrome123"));;
+//        System.out.println(startApp("chrome123"));;
+//        System.out.println(startApp("chrome"));;
         // System.out.println(stopApp(1111111));
         // screenshot();
 
@@ -49,7 +50,7 @@ public class WinAPI {
             String command = ("powershell.exe " + processName);
             Process p = Runtime.getRuntime().exec(command);
 
-            Thread.sleep(3000);
+            p.waitFor();
 
             try {
                 return p.exitValue() == 0;
@@ -106,7 +107,7 @@ public class WinAPI {
         try {
             Process p = Runtime.getRuntime().exec(command);
 
-            Thread.sleep(3000);
+            p.waitFor();
 
             try {
                 return p.exitValue() == 0;
@@ -165,7 +166,8 @@ public class WinAPI {
         try {
             Process p = pb.start();
 
-            Thread.sleep(3000);
+            //Thread.sleep(3000);
+            p.waitFor();
 
             try {
                 return p.exitValue() == 0;
@@ -186,7 +188,7 @@ public class WinAPI {
         try {
             Process p = pb.start();
 
-            Thread.sleep(3000);
+            p.waitFor();p.waitFor();
 
             try {
                 return p.exitValue() == 0;
