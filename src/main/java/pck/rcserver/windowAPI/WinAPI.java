@@ -52,11 +52,8 @@ public class WinAPI {
 
             p.waitFor();
 
-            try {
-                return p.exitValue() == 0;
-            } catch (Exception e) {
-                return true;
-            }
+            return p.exitValue() == 0;
+
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -109,11 +106,7 @@ public class WinAPI {
 
             p.waitFor();
 
-            try {
-                return p.exitValue() == 0;
-            } catch (Exception e) {
-                return true;
-            }
+            return p.exitValue() == 0;
         } catch (Exception e) {
             e.printStackTrace();
 
@@ -169,11 +162,7 @@ public class WinAPI {
             //Thread.sleep(3000);
             p.waitFor();
 
-            try {
-                return p.exitValue() == 0;
-            } catch (Exception e) {
-                return true;
-            }
+            return p.exitValue() == 0;
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -190,11 +179,7 @@ public class WinAPI {
 
             p.waitFor();
 
-            try {
-                return p.exitValue() == 0;
-            } catch (Exception e) {
-                return false;
-            }
+            return p.exitValue() == 0;
         } catch (Exception e) {
             e.printStackTrace();
 
@@ -254,11 +239,7 @@ public class WinAPI {
 
             p.waitFor();
 
-            try {
-                return p.exitValue() == 0;
-            } catch (Exception e) {
-                return false;
-            }
+            return p.exitValue() == 0;
         } catch (Exception e) {
             e.printStackTrace();
             return false;
