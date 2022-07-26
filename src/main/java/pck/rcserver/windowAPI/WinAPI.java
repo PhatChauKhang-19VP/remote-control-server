@@ -17,13 +17,14 @@ public class WinAPI {
     public static boolean run = false;
 
     public static void main(String[] args) {
-        System.out.println(startProcess("notepad12312"));
+        // System.out.println(startProcess("notepad12312"));
         // getListRunningProcess();
         // getListRunningApp();
         // System.out.println(startProcess("notepad345.exe "));
         // stopProcess(???)
-        // startApp("notepad.exe");
-        // System.out.println(stopApp("notepad.exe"));
+//        System.out.println(startApp("chrome123"));;
+//        System.out.println(startApp("chrome"));;
+        // System.out.println(stopApp(1111111));
         // screenshot();
 
         // ArrayList<Integer> keypressList = new ArrayList<>();
@@ -31,7 +32,7 @@ public class WinAPI {
         //
         // new Thread(() -> {
         //     try {
-        //         Thread.sleep(5000);
+        //         Thread.sleep(30000);
         //
         //         keyStrokeUnhook(globalKeyboardHook);
         //         System.out.println(keypressList);
@@ -49,7 +50,7 @@ public class WinAPI {
             String command = ("powershell.exe " + processName);
             Process p = Runtime.getRuntime().exec(command);
 
-            Thread.sleep(500);
+            p.waitFor();
 
             try {
                 return p.exitValue() == 0;
@@ -101,12 +102,12 @@ public class WinAPI {
     }
 
     public static boolean stopProcess(int pid) {
-        ProcessBuilder pb = new ProcessBuilder("powershell.exe ", String.format("taskkill /f /pid %d", pid));
+        String command = "powershell.exe " + String.format("taskkill /f /pid %d", pid);
 
         try {
-            Process p = pb.start();
+            Process p = Runtime.getRuntime().exec(command);
 
-            Thread.sleep(500);
+            p.waitFor();
 
             try {
                 return p.exitValue() == 0;
@@ -165,7 +166,8 @@ public class WinAPI {
         try {
             Process p = pb.start();
 
-            Thread.sleep(500);
+            //Thread.sleep(3000);
+            p.waitFor();
 
             try {
                 return p.exitValue() == 0;
@@ -186,7 +188,7 @@ public class WinAPI {
         try {
             Process p = pb.start();
 
-            Thread.sleep(500);
+            p.waitFor();
 
             try {
                 return p.exitValue() == 0;
@@ -245,17 +247,17 @@ public class WinAPI {
     }
 
     public static boolean shutdown() {
-        ProcessBuilder pb = new ProcessBuilder("powershell.exe ", "shutdown -s -t 5000");
+        ProcessBuilder pb = new ProcessBuilder("powershell.exe ", "shutdown -s -t 10");
 
         try {
             Process p = pb.start();
 
-            Thread.sleep(1000);
+            p.waitFor();
 
             try {
                 return p.exitValue() == 0;
             } catch (Exception e) {
-                return true;
+                return false;
             }
         } catch (Exception e) {
             e.printStackTrace();

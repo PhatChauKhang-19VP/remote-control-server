@@ -250,7 +250,7 @@ public class Worker extends Thread {
                 if (WinAPI.shutdown()) {
                     return new Response(
                             RESPONSE_STATUS.SUCCESS,
-                            "Target PC will shut down in 2 second",
+                            "Target PC will shut down in 10 second",
                             REQUEST_TYPE.SHUTDOWN
                     );
                 }
