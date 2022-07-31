@@ -53,7 +53,6 @@ public class WinAPI {
             p.waitFor();
 
             return p.exitValue() == 0;
-
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -105,6 +104,7 @@ public class WinAPI {
             Process p = Runtime.getRuntime().exec(command);
 
             p.waitFor();
+
 
             return p.exitValue() == 0;
         } catch (Exception e) {
@@ -163,7 +163,6 @@ public class WinAPI {
             p.waitFor();
 
             return p.exitValue() == 0;
-
         } catch (Exception e) {
             e.printStackTrace();
 
