@@ -17,7 +17,7 @@ public class WinAPI {
     public static boolean run = false;
 
     public static void main(String[] args) {
-        // System.out.println(startProcess("notepad12312"));
+         System.out.println(startProcess("cmd"));
         // getListRunningProcess();
         // getListRunningApp();
         // System.out.println(startProcess("notepad345.exe "));
@@ -47,8 +47,8 @@ public class WinAPI {
 
     public static boolean startProcess(String processName) {
         try {
-            String command = ("powershell.exe " + processName);
-            Process p = Runtime.getRuntime().exec(command);
+            ProcessBuilder pb = new ProcessBuilder("powershell.exe ", String.format("start %s", processName));
+            Process p = pb.start();
 
             p.waitFor();
 

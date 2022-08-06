@@ -18,6 +18,7 @@ public class Worker extends Thread {
 
     public Worker(Client client) {
         this.client = client;
+        setDaemon(true);
     }
 
     //Handle client request and send response from server to client

@@ -8,6 +8,7 @@ import java.net.Socket;
 import java.util.LinkedHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class Server {
     public static final int NUM_OF_THREAD = 32;
@@ -48,7 +49,7 @@ public class Server {
     }
 
     public static void start() {
-        thread = new Thread(() -> {
+        new Thread(() -> {
             try {
                 System.out.println("Start and wait for clients ...");
                 ExecutorService executor = Executors.newFixedThreadPool(NUM_OF_THREAD);
@@ -71,17 +72,22 @@ public class Server {
                     }
                 }
                 serverSocket.close();
-            } catch (IOException e) {
+                executor.shutdown();
+                executor.awaitTermination(10, TimeUnit.SECONDS); // wait for 10s in this case
+                executor.shutdownNow();
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-        });
-        thread.start();
+        }).start();
     }
 
     public static void stop() {
         if (serverSocket != null && !serverSocket.isClosed()) {
             try {
                 serverSocket.close();
+                for (int key : clients.keySet()) {
+                    clients.get(key).getSocket().close();
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
